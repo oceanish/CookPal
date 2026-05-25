@@ -51,3 +51,4 @@
 ## Лицензия
 
 MIT
+# Testing GitHub Actions CI
