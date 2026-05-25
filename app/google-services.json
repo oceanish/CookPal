@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "836572095003",
+    "project_id": "project-a7e10",
+    "storage_bucket": "project-a7e10.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:836572095003:android:c072986096e7422cd18ebe",
+        "android_client_info": {
+          "package_name": "com.cookpal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsEwPfz6J5tkAf4f4YeLhTrgc2QpCJtRY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
