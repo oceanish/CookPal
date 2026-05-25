@@ -33,6 +33,12 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Set Spoonacular API key
+        run: echo "SPOONACULAR_API_KEY=${{ secrets.SPOONACULAR_API_KEY }}" >> $GITHUB_ENV
+
+      - name: Configure Gradle JVM args for API key
+        run: echo "org.gradle.jvmargs=-DSPOONACULAR_API_KEY=${{ secrets.SPOONACULAR_API_KEY }}" >> gradle.properties
+
       - name: Run unit tests
         run: ./gradlew test
 

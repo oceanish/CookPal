@@ -1,5 +1,6 @@
 package com.cookpal.data.repository
 
+import android.util.Log
 import com.cookpal.data.local.dao.FavoriteRecipeDao
 import com.cookpal.data.local.dao.ProductDao
 import com.cookpal.data.local.dao.ShoppingItemDao
@@ -18,9 +19,18 @@ class RecipeRepository(
     private val shoppingDao: ShoppingItemDao
 ) {
     private val apiKey: String
-        get() = System.getProperty("SPOONACULAR_API_KEY")
-            ?: System.getenv("SPOONACULAR_API_KEY")
-            ?: ""
+        get() {
+            val key = System.getProperty("SPOONACULAR_API_KEY")
+                    ?: System.getenv("SPOONACULAR_API_KEY")
+                    ?: ""
+            // Log for debugging (do not log the actual key in production)
+            if (key.isNotEmpty()) {
+                Log.d("RecipeRepository", "API key loaded (length: ${key.length})")
+            } else {
+                Log.w("RecipeRepository", "API key is empty!")
+            }
+            return key
+        }
 
     fun getAllProducts(): Flow<List<ProductEntity>> = productDao.getAllProducts()
 
@@ -73,8 +83,16 @@ class RecipeRepository(
     }
 
     suspend fun searchRecipes(query: String): List<RecipeSummary> {
-        val response = api.searchRecipes(query, apiKey)
-        return response.results
+        Log.d("RecipeRepository", "Searching for recipes with query: $query")
+        Log.d("RecipeRepository", "API key length: ${apiKey.length}")
+        try {
+            val response = api.searchRecipes(query, apiKey)
+            Log.d("RecipeRepository", "Search successful, got ${response.results.size} results")
+            return response.results
+        } catch (e: Exception) {
+            Log.e("RecipeRepository", "Search failed: ${e.message}", e)
+            throw e
+        }
     }
 
     suspend fun getRecipeInfo(id: Long): RecipeInfoResponse {
