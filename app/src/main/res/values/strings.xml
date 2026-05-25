@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CookPal</string>
+    <string name="nav_products">Мои продукты</string>
+    <string name="nav_search">Поиск рецептов</string>
+    <string name="nav_favorites">Избранное</string>
+    <string name="nav_shopping">Список покупок</string>
+    <string name="add_product">Добавить продукт</string>
+    <string name="search_recipes">Поиск рецептов</string>
+    <string name="recipe_detail">Детали рецепта</string>
+    <string name="add_to_favorites">В избранное</string>
+    <string name="add_to_shopping_list">Добавить в список покупок</string>
+    <string name="move_to_products">Перенести купленное в продукты</string>
+</resources>
