@@ -66,5 +66,5 @@ jobs:
             --type instrumentation \
             --app app/build/outputs/apk/debug/app-debug.apk \
             --test app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk \
-            --device model=bluejay,version=30,locale=ru,orientation=portrait \
+            --device model=bluejay,version=32,locale=ru,orientation=portrait \
             --timeout 15m
