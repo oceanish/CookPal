@@ -1,41 +1,52 @@
 package com.cookpal
 
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.activity.ComponentActivity
+import androidx.compose.material3.MaterialTheme
+import androidx.navigation.testing.TestNavHostController
+import androidx.test.core.app.ApplicationProvider
+import com.cookpal.CookPalApp
+import com.cookpal.di.AppContainer
 import com.cookpal.ui.products.ProductsScreen
-import com.cookpal.ui.theme.CookPalTheme
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
 class ProductsScreenTest {
 
     @get:Rule
-    val composeTestRule = createComposeRule()
+    val androidComposeRule = createAndroidComposeRule<ComponentActivity>()
+
+    @Before
+    fun setup() {
+        // No mocking needed for now
+    }
 
     @Test
     fun productsScreen_showsEmptyMessage() {
-        composeTestRule.setContent {
-            CookPalTheme {
-                ProductsScreen(navController = androidx.navigation.testing.TestNavHostController(
-                    androidx.test.platform.app.InstrumentationRegistry.getInstrumentation().targetContext
+        androidComposeRule.setContent {
+            MaterialTheme {
+                ProductsScreen(navController = TestNavHostController(
+                    androidComposeRule.activity
                 ))
             }
         }
 
-        composeTestRule.onNodeWithText("Продуктов пока нет").assertExists()
+        androidComposeRule.onNodeWithText("Продуктов пока нет").assertExists()
     }
 
     @Test
     fun productsScreen_showsFab() {
-        composeTestRule.setContent {
-            CookPalTheme {
-                ProductsScreen(navController = androidx.navigation.testing.TestNavHostController(
-                    androidx.test.platform.app.InstrumentationRegistry.getInstrumentation().targetContext
+        androidComposeRule.setContent {
+            MaterialTheme {
+                ProductsScreen(navController = TestNavHostController(
+                    androidComposeRule.activity
                 ))
             }
         }
 
-        composeTestRule.onNodeWithText("Мои продукты").assertExists()
+        androidComposeRule.onNodeWithText("Мои продукты").assertExists()
     }
 }

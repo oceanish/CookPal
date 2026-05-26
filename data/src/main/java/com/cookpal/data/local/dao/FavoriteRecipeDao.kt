@@ -20,4 +20,7 @@ interface FavoriteRecipeDao {
 
     @Query("SELECT * FROM favorite_recipes WHERE apiRecipeId = :apiRecipeId LIMIT 1")
     suspend fun getFavoriteByApiId(apiRecipeId: Long): FavoriteRecipeEntity?
+
+    @Query("DELETE FROM favorite_recipes WHERE apiRecipeId = :apiRecipeId")
+    suspend fun deleteFavoriteByApiId(apiRecipeId: Long)
 }

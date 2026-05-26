@@ -1,6 +1,7 @@
 package com.cookpal.di
 
 import android.content.Context
+import com.cookpal.BuildConfig
 import com.cookpal.data.local.CookPalDatabase
 import com.cookpal.data.remote.SpoonacularApi
 import com.cookpal.data.repository.RecipeRepository
@@ -42,6 +43,7 @@ class AppContainer(context: Context) {
         api = spoonacularApi,
         productDao = database.productDao(),
         favoriteDao = database.favoriteRecipeDao(),
-        shoppingDao = database.shoppingItemDao()
+        shoppingDao = database.shoppingItemDao(),
+        apiKey = BuildConfig.SPOONACULAR_API_KEY
     )
 }

@@ -16,21 +16,9 @@ class RecipeRepository(
     private val api: SpoonacularApi,
     private val productDao: ProductDao,
     private val favoriteDao: FavoriteRecipeDao,
-    private val shoppingDao: ShoppingItemDao
-) {
+    private val shoppingDao: ShoppingItemDao,
     private val apiKey: String
-        get() {
-            val key = System.getProperty("SPOONACULAR_API_KEY")
-                    ?: System.getenv("SPOONACULAR_API_KEY")
-                    ?: ""
-            // Log for debugging (do not log the actual key in production)
-            if (key.isNotEmpty()) {
-                Log.d("RecipeRepository", "API key loaded (length: ${key.length})")
-            } else {
-                Log.w("RecipeRepository", "API key is empty!")
-            }
-            return key
-        }
+) {
 
     fun getAllProducts(): Flow<List<ProductEntity>> = productDao.getAllProducts()
 
@@ -58,6 +46,10 @@ class RecipeRepository(
 
     suspend fun isFavorite(apiRecipeId: Long): Boolean =
         favoriteDao.getFavoriteByApiId(apiRecipeId) != null
+
+    suspend fun deleteFavoriteByApiId(apiRecipeId: Long) {
+        favoriteDao.deleteFavoriteByApiId(apiRecipeId)
+    }
 
     fun getAllShoppingItems(): Flow<List<ShoppingItemEntity>> =
         shoppingDao.getAllItems()

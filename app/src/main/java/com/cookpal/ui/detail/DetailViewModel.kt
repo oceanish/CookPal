@@ -77,9 +77,7 @@ class DetailViewModel(
         val recipe = _uiState.value.recipe ?: return
         viewModelScope.launch {
             if (_uiState.value.isFavorite) {
-                repository.deleteFavorite(
-                    FavoriteRecipeEntity(apiRecipeId = recipeId, title = "", imageUrl = "", ingredientsJson = "", instructionsJson = "")
-                )
+                repository.deleteFavoriteByApiId(recipeId)
                 _uiState.update { it.copy(isFavorite = false) }
             } else {
                 val ingredientsJson = try {

@@ -1,8 +1,34 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
     id("com.google.gms.google-services")
+}
+
+val localProperties = Properties().apply {
+    val localPropsFile = rootProject.file("local.properties")
+    if (localPropsFile.exists()) {
+        localPropsFile.inputStream().use { load(it) }
+    }
+}
+
+val spoonacularApiKey: String =
+    localProperties.getProperty("SPOONACULAR_API_KEY")
+        ?: providers.gradleProperty("SPOONACULAR_API_KEY").orNull
+        ?: parseApiKeyFromJvmArgs()
+
+private fun parseApiKeyFromJvmArgs(): String {
+    val gradlePropsFile = rootProject.file("gradle.properties")
+    if (!gradlePropsFile.exists()) return ""
+    val jvmArgs = gradlePropsFile.readText()
+    val prefix = "-DSPOONACULAR_API_KEY="
+    val idx = jvmArgs.indexOf(prefix)
+    if (idx < 0) return ""
+    val start = idx + prefix.length
+    val end = jvmArgs.indexOf(' ', start).let { if (it < 0) jvmArgs.length else it }
+    return jvmArgs.substring(start, end)
 }
 
 android {
@@ -20,6 +46,8 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        buildConfigField("String", "SPOONACULAR_API_KEY", "\"$spoonacularApiKey\"")
     }
 
     buildTypes {
@@ -43,6 +71,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     composeOptions {
@@ -53,7 +82,7 @@ android {
 
     packaging {
         resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "META-INF/{AL2.0,LGPL2.1,LICENSE.md,LICENSE-notice.md}"
         }
     }
 }
@@ -87,6 +116,7 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
     testImplementation("io.mockk:mockk:1.13.8")
+    androidTestImplementation("io.mockk:mockk:1.13.8")
 
     androidTestImplementation(composeBom)
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
