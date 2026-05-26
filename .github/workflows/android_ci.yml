@@ -38,6 +38,7 @@ jobs:
 
       - name: Configure Gradle JVM args for API key
         run: echo "org.gradle.jvmargs=-DSPOONACULAR_API_KEY=${{ secrets.SPOONACULAR_API_KEY }}" >> gradle.properties
+
       - name: Decode google-services.json
         run: echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 -d > app/google-services.json
 
