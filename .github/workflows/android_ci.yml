@@ -24,20 +24,14 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Set Spoonacular API key
-        run: echo "SPOONACULAR_API_KEY=${{ secrets.SPOONACULAR_API_KEY }}" >> $GITHUB_ENV
-
-      - name: Configure Gradle JVM args for API key
-        run: echo "org.gradle.jvmargs=-DSPOONACULAR_API_KEY=${{ secrets.SPOONACULAR_API_KEY }}" >> gradle.properties
-
       - name: Decode google-services.json
         run: echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 -d > app/google-services.json
 
       - name: Run unit tests
-        run: ./gradlew test
+        run: ./gradlew test -PSPOONACULAR_API_KEY="${{ secrets.SPOONACULAR_API_KEY }}"
 
       - name: Build debug APK
-        run: ./gradlew assembleDebug assembleDebugAndroidTest
+        run: ./gradlew assembleDebug assembleDebugAndroidTest -PSPOONACULAR_API_KEY="${{ secrets.SPOONACULAR_API_KEY }}"
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
