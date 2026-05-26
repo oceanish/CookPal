@@ -15,7 +15,7 @@ import com.cookpal.ui.search.SearchScreen
 fun NavGraph(navController: NavHostController) {
     NavHost(navController = navController, startDestination = "products") {
         composable("products") {
-            ProductsScreen(navController = navController)
+            ProductsScreen()
         }
         composable("search") {
             SearchScreen(navController = navController)
@@ -28,7 +28,7 @@ fun NavGraph(navController: NavHostController) {
         }
         composable(
             route = "detail/{recipeId}",
-            arguments = listOf(navArgument("recipeId") { type = NavType.LongType })
+            arguments = listOf(navArgument("recipeId") { type = NavType.LongType }),
         ) { backStackEntry ->
             val recipeId = backStackEntry.arguments?.getLong("recipeId") ?: return@composable
             DetailScreen(recipeId = recipeId, navController = navController)

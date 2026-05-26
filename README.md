@@ -24,17 +24,28 @@
 
 ## Установка
 
+### Локальная разработка
+
 1. Клонируйте репозиторий:
-   ```bash
-   git clone https://github.com/your-org/cookpal.git
-   ```
+    ```bash
+    git clone https://github.com/your-org/cookpal.git
+    ```
 2. Откройте проект в Android Studio.
 3. Получите API-ключ на [spoonacular.com/food-api](https://spoonacular.com/food-api).
 4. Укажите ключ в файле `local.properties`:
-   ```
-   SPOONACULAR_API_KEY=your_api_key_here
-   ```
+    ```
+    SPOONACULAR_API_KEY=your_api_key_here
+    ```
 5. Соберите и запустите приложение.
+
+### Настройка CI/CD (GitHub Actions)
+
+Для работы CI необходимо добавить секреты в репозиторий:
+
+1. **`SPOONACULAR_API_KEY`** - ваш ключ от Spoonacular API
+2. **`FIREBASE_SERVICE_ACCOUNT`** - JSON ключ сервисного аккаунта Firebase для Test Lab
+
+Эти секреты автоматически передаются в процесс сборки через workflow файл `.github/workflows/android_ci.yml`.
 
 ## Использование
 
@@ -51,3 +62,4 @@
 ## Лицензия
 
 MIT
+# Testing GitHub Actions CI

@@ -1,5 +1,6 @@
 package com.cookpal.data.repository
 
+import android.util.Log
 import com.cookpal.data.local.dao.FavoriteRecipeDao
 import com.cookpal.data.local.dao.ProductDao
 import com.cookpal.data.local.dao.ShoppingItemDao
@@ -15,12 +16,9 @@ class RecipeRepository(
     private val api: SpoonacularApi,
     private val productDao: ProductDao,
     private val favoriteDao: FavoriteRecipeDao,
-    private val shoppingDao: ShoppingItemDao
+    private val shoppingDao: ShoppingItemDao,
+    private val apiKey: String,
 ) {
-    private val apiKey: String
-        get() = System.getProperty("SPOONACULAR_API_KEY")
-            ?: System.getenv("SPOONACULAR_API_KEY")
-            ?: ""
 
     fun getAllProducts(): Flow<List<ProductEntity>> = productDao.getAllProducts()
 
@@ -49,12 +47,12 @@ class RecipeRepository(
     suspend fun isFavorite(apiRecipeId: Long): Boolean =
         favoriteDao.getFavoriteByApiId(apiRecipeId) != null
 
+    suspend fun deleteFavoriteByApiId(apiRecipeId: Long) {
+        favoriteDao.deleteFavoriteByApiId(apiRecipeId)
+    }
+
     fun getAllShoppingItems(): Flow<List<ShoppingItemEntity>> =
         shoppingDao.getAllItems()
-
-    suspend fun addShoppingItem(item: ShoppingItemEntity) {
-        shoppingDao.insertItem(item)
-    }
 
     suspend fun addShoppingItems(items: List<ShoppingItemEntity>) {
         shoppingDao.insertItems(items)
@@ -73,8 +71,16 @@ class RecipeRepository(
     }
 
     suspend fun searchRecipes(query: String): List<RecipeSummary> {
-        val response = api.searchRecipes(query, apiKey)
-        return response.results
+        Log.d("RecipeRepository", "Searching for recipes with query: $query")
+        Log.d("RecipeRepository", "API key length: ${apiKey.length}")
+        return try {
+            val response = api.searchRecipes(query, apiKey)
+            Log.d("RecipeRepository", "Search successful, got ${response.results.size} results")
+            response.results
+        } catch (e: Exception) {
+            Log.e("RecipeRepository", "Search failed: ${e.message}", e)
+            throw e
+        }
     }
 
     suspend fun getRecipeInfo(id: Long): RecipeInfoResponse {

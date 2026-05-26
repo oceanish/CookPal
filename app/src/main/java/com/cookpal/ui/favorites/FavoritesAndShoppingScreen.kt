@@ -15,18 +15,17 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.DismissDirection
-import androidx.compose.material3.DismissValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SwipeToDismiss
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.rememberDismissState
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -48,7 +47,7 @@ import com.cookpal.data.local.entity.ShoppingItemEntity
 fun FavoritesAndShoppingScreen(initialTab: Int = 0) {
     val app = LocalContext.current.applicationContext as CookPalApp
     val viewModel: FavoritesViewModel = viewModel(
-        factory = FavoritesViewModelFactory(app.container.recipeRepository)
+        factory = FavoritesViewModelFactory(app.container.recipeRepository),
     )
     val state by viewModel.uiState.collectAsState()
 
@@ -109,7 +108,9 @@ private fun FavoritesTab(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(favorites, key = { it.id }) { recipe ->
-                FavoriteItem(recipe = recipe, onDelete = { onDelete(recipe) })
+                FavoriteItem(recipe = recipe) {
+                    onDelete(recipe)
+                }
             }
         }
     }
@@ -121,19 +122,19 @@ private fun FavoriteItem(
     recipe: FavoriteRecipeEntity,
     onDelete: () -> Unit
 ) {
-    val dismissState = rememberDismissState(
+    val dismissState = rememberSwipeToDismissBoxState(
         confirmValueChange = { value ->
-            if (value == DismissValue.DismissedToStart) {
+            if (value == SwipeToDismissBoxValue.EndToStart) {
                 onDelete()
                 true
             } else false
         }
     )
 
-    SwipeToDismiss(
+    SwipeToDismissBox(
         state = dismissState,
-        directions = setOf(DismissDirection.EndToStart),
-        background = {
+        enableDismissFromStartToEnd = false,
+        backgroundContent = {
             Box(
                 modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp),
                 contentAlignment = Alignment.CenterEnd
@@ -145,7 +146,7 @@ private fun FavoriteItem(
                 )
             }
         },
-        dismissContent = {
+        content = {
             Card(modifier = Modifier.fillMaxWidth()) {
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(8.dp),
@@ -154,7 +155,7 @@ private fun FavoriteItem(
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
                             .data(recipe.imageUrl)
-                            .crossfade(true)
+                            .crossfade(enable = true)
                             .build(),
                         contentDescription = null,
                         modifier = Modifier.padding(end = 8.dp),
@@ -222,19 +223,19 @@ private fun ShoppingItemRow(
     onToggle: () -> Unit,
     onDelete: () -> Unit
 ) {
-    val dismissState = rememberDismissState(
+    val dismissState = rememberSwipeToDismissBoxState(
         confirmValueChange = { value ->
-            if (value == DismissValue.DismissedToStart) {
+            if (value == SwipeToDismissBoxValue.EndToStart) {
                 onDelete()
                 true
             } else false
         }
     )
 
-    SwipeToDismiss(
+    SwipeToDismissBox(
         state = dismissState,
-        directions = setOf(DismissDirection.EndToStart),
-        background = {
+        enableDismissFromStartToEnd = false,
+        backgroundContent = {
             Box(
                 modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp),
                 contentAlignment = Alignment.CenterEnd
@@ -246,7 +247,7 @@ private fun ShoppingItemRow(
                 )
             }
         },
-        dismissContent = {
+        content = {
             Card(modifier = Modifier.fillMaxWidth()) {
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(8.dp),

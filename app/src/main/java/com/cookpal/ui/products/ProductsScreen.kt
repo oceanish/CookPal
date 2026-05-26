@@ -17,18 +17,18 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
-import androidx.compose.material3.DismissDirection
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SwipeToDismiss
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.rememberDismissState
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -37,16 +37,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import com.cookpal.CookPalApp
 import com.cookpal.data.local.entity.ProductEntity
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProductsScreen(navController: NavController) {
+fun ProductsScreen() {
     val app = LocalContext.current.applicationContext as CookPalApp
     val viewModel: ProductsViewModel = viewModel(
-        factory = ProductsViewModelFactory(app.container.recipeRepository)
+        factory = ProductsViewModelFactory(app.container.recipeRepository),
     )
     val state by viewModel.uiState.collectAsState()
 
@@ -74,10 +73,9 @@ fun ProductsScreen(navController: NavController) {
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(state.products, key = { it.id }) { product ->
-                    ProductItem(
-                        product = product,
-                        onDelete = { viewModel.deleteProduct(product) }
-                    )
+                    ProductItem(product = product) {
+                        viewModel.deleteProduct(product)
+                    }
                 }
             }
         }
@@ -105,19 +103,19 @@ private fun ProductItem(
     product: ProductEntity,
     onDelete: () -> Unit
 ) {
-    val dismissState = rememberDismissState(
+    val dismissState = rememberSwipeToDismissBoxState(
         confirmValueChange = { value ->
-            if (value == androidx.compose.material3.DismissValue.DismissedToStart) {
+            if (value == SwipeToDismissBoxValue.EndToStart) {
                 onDelete()
                 true
             } else false
         }
     )
 
-    SwipeToDismiss(
+    SwipeToDismissBox(
         state = dismissState,
-        directions = setOf(DismissDirection.EndToStart),
-        background = {
+        enableDismissFromStartToEnd = false,
+        backgroundContent = {
             Box(
                 modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp),
                 contentAlignment = Alignment.CenterEnd
@@ -129,7 +127,7 @@ private fun ProductItem(
                 )
             }
         },
-        dismissContent = {
+        content = {
             Card(modifier = Modifier.fillMaxWidth()) {
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(16.dp),

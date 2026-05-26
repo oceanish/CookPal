@@ -22,7 +22,7 @@ data class DetailUiState(
     val isFavorite: Boolean = false,
     val missingIngredients: List<String> = emptyList(),
     val addedToShoppingList: Boolean = false,
-    val error: String? = null
+    val error: String? = null,
 )
 
 class DetailViewModel(
@@ -49,13 +49,14 @@ class DetailViewModel(
                 val isFav = repository.isFavorite(recipeId)
                 val productNames = repository.getAvailableProductNames()
                 val missing = recipe.extendedIngredients
-                    ?.filter { ing ->
+                    .asSequence()
+                    .filter { ing ->
                         productNames.none { p ->
-                            p.lowercase() == ing.name.lowercase()
+                            p.equals(ing.name, ignoreCase = true)
                         }
                     }
-                    ?.mapNotNull { it.original ?: it.name }
-                    ?: emptyList()
+                    .map { it.original ?: it.name }
+                    .toList()
 
                 _uiState.update {
                     it.copy(
@@ -77,9 +78,7 @@ class DetailViewModel(
         val recipe = _uiState.value.recipe ?: return
         viewModelScope.launch {
             if (_uiState.value.isFavorite) {
-                repository.deleteFavorite(
-                    FavoriteRecipeEntity(apiRecipeId = recipeId, title = "", imageUrl = "", ingredientsJson = "", instructionsJson = "")
-                )
+                repository.deleteFavoriteByApiId(recipeId)
                 _uiState.update { it.copy(isFavorite = false) }
             } else {
                 val ingredientsJson = try {

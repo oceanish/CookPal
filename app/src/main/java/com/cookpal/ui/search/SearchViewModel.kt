@@ -16,7 +16,7 @@ data class SearchUiState(
     val suggestions: List<String> = emptyList(),
     val results: List<RecipeSummary> = emptyList(),
     val isLoading: Boolean = false,
-    val error: String? = null
+    val error: String? = null,
 )
 
 class SearchViewModel(
@@ -32,9 +32,11 @@ class SearchViewModel(
             viewModelScope.launch {
                 val names = repository.getAvailableProductNames()
                 _uiState.update {
-                    it.copy(suggestions = names.filter { n ->
-                        n.contains(query, ignoreCase = true)
-                    })
+                    it.copy(
+                        suggestions = names.filter { n ->
+                            n.contains(query, ignoreCase = true)
+                        }
+                    )
                 }
             }
         } else {
