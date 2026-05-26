@@ -47,7 +47,7 @@ import com.cookpal.data.local.entity.ShoppingItemEntity
 fun FavoritesAndShoppingScreen(initialTab: Int = 0) {
     val app = LocalContext.current.applicationContext as CookPalApp
     val viewModel: FavoritesViewModel = viewModel(
-        factory = FavoritesViewModelFactory(app.container.recipeRepository)
+        factory = FavoritesViewModelFactory(app.container.recipeRepository),
     )
     val state by viewModel.uiState.collectAsState()
 
@@ -108,7 +108,9 @@ private fun FavoritesTab(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(favorites, key = { it.id }) { recipe ->
-                FavoriteItem(recipe = recipe, onDelete = { onDelete(recipe) })
+                FavoriteItem(recipe = recipe) {
+                    onDelete(recipe)
+                }
             }
         }
     }
@@ -153,7 +155,7 @@ private fun FavoriteItem(
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
                             .data(recipe.imageUrl)
-                            .crossfade(true)
+                            .crossfade(enable = true)
                             .build(),
                         contentDescription = null,
                         modifier = Modifier.padding(end = 8.dp),

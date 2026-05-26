@@ -37,16 +37,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import com.cookpal.CookPalApp
 import com.cookpal.data.local.entity.ProductEntity
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProductsScreen(navController: NavController) {
+fun ProductsScreen() {
     val app = LocalContext.current.applicationContext as CookPalApp
     val viewModel: ProductsViewModel = viewModel(
-        factory = ProductsViewModelFactory(app.container.recipeRepository)
+        factory = ProductsViewModelFactory(app.container.recipeRepository),
     )
     val state by viewModel.uiState.collectAsState()
 
@@ -74,10 +73,9 @@ fun ProductsScreen(navController: NavController) {
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(state.products, key = { it.id }) { product ->
-                    ProductItem(
-                        product = product,
-                        onDelete = { viewModel.deleteProduct(product) }
-                    )
+                    ProductItem(product = product) {
+                        viewModel.deleteProduct(product)
+                    }
                 }
             }
         }

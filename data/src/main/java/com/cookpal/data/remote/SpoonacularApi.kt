@@ -9,7 +9,7 @@ interface SpoonacularApi {
     suspend fun searchRecipes(
         @Query("query") query: String,
         @Query("apiKey") apiKey: String,
-        @Query("number") number: Int = 20
+        @Query("number") number: Int = 20,
     ): RecipeSearchResponse
 
     @GET("/recipes/{id}/information")

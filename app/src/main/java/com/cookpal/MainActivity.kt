@@ -42,7 +42,7 @@ fun MainScreen() {
         BottomNavItem.Products,
         BottomNavItem.Search,
         BottomNavItem.Favorites,
-        BottomNavItem.Shopping
+        BottomNavItem.Shopping,
     )
 
     Scaffold(

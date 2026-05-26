@@ -10,7 +10,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 sealed class BottomNavItem(
     val route: String,
     val title: String,
-    val icon: ImageVector
+    val icon: ImageVector,
 ) {
     data object Products : BottomNavItem("products", "Мои продукты", Icons.Default.Home)
     data object Search : BottomNavItem("search", "Поиск рецептов", Icons.Default.Search)

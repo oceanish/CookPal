@@ -17,7 +17,7 @@ class RecipeRepository(
     private val productDao: ProductDao,
     private val favoriteDao: FavoriteRecipeDao,
     private val shoppingDao: ShoppingItemDao,
-    private val apiKey: String
+    private val apiKey: String,
 ) {
 
     fun getAllProducts(): Flow<List<ProductEntity>> = productDao.getAllProducts()
@@ -54,10 +54,6 @@ class RecipeRepository(
     fun getAllShoppingItems(): Flow<List<ShoppingItemEntity>> =
         shoppingDao.getAllItems()
 
-    suspend fun addShoppingItem(item: ShoppingItemEntity) {
-        shoppingDao.insertItem(item)
-    }
-
     suspend fun addShoppingItems(items: List<ShoppingItemEntity>) {
         shoppingDao.insertItems(items)
     }
@@ -77,10 +73,10 @@ class RecipeRepository(
     suspend fun searchRecipes(query: String): List<RecipeSummary> {
         Log.d("RecipeRepository", "Searching for recipes with query: $query")
         Log.d("RecipeRepository", "API key length: ${apiKey.length}")
-        try {
+        return try {
             val response = api.searchRecipes(query, apiKey)
             Log.d("RecipeRepository", "Search successful, got ${response.results.size} results")
-            return response.results
+            response.results
         } catch (e: Exception) {
             Log.e("RecipeRepository", "Search failed: ${e.message}", e)
             throw e

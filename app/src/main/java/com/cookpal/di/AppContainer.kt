@@ -22,7 +22,7 @@ class AppContainer(context: Context) {
         .build()
 
     private val loggingInterceptor: Interceptor = HttpLoggingInterceptor().apply {
-        (this as HttpLoggingInterceptor).level = HttpLoggingInterceptor.Level.BODY
+        level = HttpLoggingInterceptor.Level.BODY
     }
 
     private val okHttpClient = OkHttpClient.Builder()
@@ -44,6 +44,6 @@ class AppContainer(context: Context) {
         productDao = database.productDao(),
         favoriteDao = database.favoriteRecipeDao(),
         shoppingDao = database.shoppingItemDao(),
-        apiKey = BuildConfig.SPOONACULAR_API_KEY
+        apiKey = BuildConfig.SPOONACULAR_API_KEY,
     )
 }

@@ -8,7 +8,7 @@ data class RecipeInfoResponse(
     @Json(name = "image") val image: String,
     @Json(name = "extendedIngredients") val extendedIngredients: List<Ingredient>,
     @Json(name = "instructions") val instructions: String?,
-    @Json(name = "analyzedInstructions") val analyzedInstructions: List<AnalyzedInstruction>?
+    @Json(name = "analyzedInstructions") val analyzedInstructions: List<AnalyzedInstruction>?,
 )
 
 data class Ingredient(
@@ -16,7 +16,7 @@ data class Ingredient(
     @Json(name = "name") val name: String,
     @Json(name = "amount") val amount: Double,
     @Json(name = "unit") val unit: String?,
-    @Json(name = "original") val original: String?
+    @Json(name = "original") val original: String?,
 )
 
 data class AnalyzedInstruction(

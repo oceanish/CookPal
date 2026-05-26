@@ -28,9 +28,7 @@ class ProductsScreenTest {
     fun productsScreen_showsEmptyMessage() {
         androidComposeRule.setContent {
             MaterialTheme {
-                ProductsScreen(navController = TestNavHostController(
-                    androidComposeRule.activity
-                ))
+                ProductsScreen()
             }
         }
 
@@ -41,9 +39,7 @@ class ProductsScreenTest {
     fun productsScreen_showsFab() {
         androidComposeRule.setContent {
             MaterialTheme {
-                ProductsScreen(navController = TestNavHostController(
-                    androidComposeRule.activity
-                ))
+                ProductsScreen()
             }
         }
 

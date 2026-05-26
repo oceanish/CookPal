@@ -43,7 +43,7 @@ import com.cookpal.data.remote.RecipeSummary
 fun SearchScreen(navController: NavController) {
     val app = LocalContext.current.applicationContext as CookPalApp
     val viewModel: SearchViewModel = viewModel(
-        factory = SearchViewModelFactory(app.container.recipeRepository)
+        factory = SearchViewModelFactory(app.container.recipeRepository),
     )
     val state by viewModel.uiState.collectAsState()
 
@@ -58,7 +58,7 @@ fun SearchScreen(navController: NavController) {
                     Icon(Icons.Default.Search, contentDescription = "Искать")
                 }
             },
-            singleLine = true
+            singleLine = true,
         )
 
         if (state.suggestions.isNotEmpty()) {
@@ -116,10 +116,9 @@ fun SearchScreen(navController: NavController) {
                     modifier = Modifier.fillMaxSize()
                 ) {
                     items(state.results, key = { it.id }) { recipe ->
-                        RecipeCard(
-                            recipe = recipe,
-                            onClick = { navController.navigate("detail/${recipe.id}") }
-                        )
+                        RecipeCard(recipe = recipe) {
+                            navController.navigate("detail/${recipe.id}")
+                        }
                     }
                 }
             }
@@ -152,7 +151,7 @@ private fun RecipeCard(
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(recipe.image)
-                    .crossfade(true)
+                    .crossfade(enable = true)
                     .build(),
                 contentDescription = recipe.title,
                 modifier = Modifier.fillMaxWidth().height(120.dp),
