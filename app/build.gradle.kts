@@ -3,6 +3,7 @@ import java.util.Properties
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.compose")
     id("com.google.devtools.ksp")
     id("com.google.gms.google-services")
 }
@@ -33,12 +34,12 @@ private fun parseApiKeyFromJvmArgs(): String {
 
 android {
     namespace = "com.cookpal"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.cookpal"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -74,12 +75,6 @@ android {
         buildConfig = true
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.10"
-    }
-
-
-
     packaging {
         resources {
             excludes += "META-INF/{AL2.0,LGPL2.1,LICENSE.md,LICENSE-notice.md}"
@@ -99,28 +94,28 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended")
     implementation("androidx.compose.animation:animation")
 
-    implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
+    implementation(platform("com.google.firebase:firebase-bom:34.13.0"))
     implementation("com.google.firebase:firebase-analytics")
 
     implementation("io.coil-kt:coil-compose:2.7.0")
 
-    implementation("androidx.navigation:navigation-compose:2.8.6")
-    implementation("androidx.activity:activity-compose:1.9.3")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
-    implementation("androidx.core:core-ktx:1.13.1")
+    implementation("androidx.navigation:navigation-compose:2.9.8")
+    implementation("androidx.activity:activity-compose:1.13.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.10.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.10.0")
+    implementation("androidx.core:core-ktx:1.18.0")
 
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
-    testImplementation("io.mockk:mockk:1.13.8")
-    androidTestImplementation("io.mockk:mockk:1.13.8")
+    testImplementation("io.mockk:mockk:1.14.3")
+    androidTestImplementation("io.mockk:mockk:1.14.3")
 
     androidTestImplementation(composeBom)
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    androidTestImplementation("androidx.navigation:navigation-testing:2.7.6")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("androidx.navigation:navigation-testing:2.9.8")
+    androidTestImplementation("androidx.test.ext:junit:1.3.0")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.7.0")
 }
